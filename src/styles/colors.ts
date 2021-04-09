@@ -5,6 +5,7 @@ const colors = {
   secondary: '#00c966',
   secondaryDark: '#3c4a3f',
   secondaryLight: '#d5fadc',
+  text: '#303030',
   gray: '#dfe0df',
 };
 

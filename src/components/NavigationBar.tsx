@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Image, Nav, Navbar } from 'react-bootstrap';
 import { AppContext } from '../store/AppContext';
-import colors from '../styles/colors';
 
 interface NavigationLinkProps {
   to: string;
@@ -14,8 +13,12 @@ const NavigationLink: React.FC<NavigationLinkProps> = ({ to, label, children }) 
   return (
     <NavLink
       to={to}
+      style={{
+        marginLeft: 6,
+        marginRight: 6,
+      }}
       activeStyle={{
-        color: colors.primary
+        fontWeight: 'bold'
       }}
     >
       { label ?  label : children}
@@ -42,7 +45,7 @@ const NavigationBar: React.FC = () => {
         </Nav>
       </Navbar.Collapse>
       <Nav className='justify-content-end'>
-        <NavigationLink to='/customers'>
+        <NavigationLink to='/profile'>
           <Image roundedCircle src='/assets/avatar-placeholder.jpg' style={{ width: 30, height: 30 }} />
         </NavigationLink>
       </Nav>

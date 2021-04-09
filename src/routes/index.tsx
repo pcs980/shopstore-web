@@ -7,17 +7,20 @@ import {
 import Home from '../pages/Home';
 import Signin from '../pages/Signin';
 import Signup from '../pages/Signup';
-import CustomersHome from '../pages/CustomersHome';
-import ProductsHome from '../pages/ProductsHome';
+import Customers from '../pages/Customers';
+import Products from '../pages/Products';
+import ProtectedRoute from './ProtectedRoute';
+import Profile from '../pages/Profile';
 
 const Routes = () => (
   <Router>
     <Switch>
-      <Route exact path='/' component={Home} />
       <Route exact path='/signin' component={Signin}/>
       <Route exact path='/signup' component={Signup}/>
-      <Route exact path='/customers' component={CustomersHome}/>
-      <Route exact path='/products' component={ProductsHome}/>
+      <ProtectedRoute exact path='/' component={Home} />
+      <ProtectedRoute exact path='/customers' component={Customers}/>
+      <ProtectedRoute exact path='/products' component={Products}/>
+      <ProtectedRoute exact path='/profile' component={Profile}/>
     </Switch>
   </Router>
 );
