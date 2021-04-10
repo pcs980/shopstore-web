@@ -27,7 +27,6 @@ const NavigationLink: React.FC<NavigationLinkProps> = ({ to, label, children }) 
 };
 
 const NavigationBar: React.FC = () => {
-
   const { user } = useContext(AppContext);
 
   if (!user?.authenticated) {
@@ -39,12 +38,17 @@ const NavigationBar: React.FC = () => {
       <Navbar.Brand href='/'>SHOPSTORE</Navbar.Brand>
       <Navbar.Toggle aria-controls='responsive-navbar-nav' />
       <Navbar.Collapse id='responsive-navbar-nav'>
-        <Nav>
-          <NavigationLink to='/customers' label='Customers' />
-          <NavigationLink to='/products' label='Products' />
-        </Nav>
+        {
+          user.emailVerified && (
+            <Nav>
+              <NavigationLink to='/customers' label='Customers' />
+              <NavigationLink to='/products' label='Products' />
+            </Nav>
+          )
+        }
       </Navbar.Collapse>
       <Nav className='justify-content-end'>
+        <NavigationLink to='/signout' label='Sign out' />
         <NavigationLink to='/profile'>
           <Image roundedCircle src='/assets/avatar-placeholder.jpg' style={{ width: 30, height: 30 }} />
         </NavigationLink>

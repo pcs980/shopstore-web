@@ -1,5 +1,5 @@
 import { createContext, Dispatch, useReducer } from 'react';
-import UserReducer, { initialUser, UserAction, UserState } from './UserReducer';
+import UserReducer, { initialUserState, UserAction, UserState } from './UserReducer';
 
 interface AppState {
   user: UserState;
@@ -7,12 +7,12 @@ interface AppState {
 }
 
 export const AppContext = createContext<AppState>({
-  user: initialUser,
+  user: initialUserState,
   setUser: () => {}
 });
 
 const AppProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useReducer(UserReducer, initialUser);
+  const [user, setUser] = useReducer(UserReducer, initialUserState);
 
   return (
     <AppContext.Provider value={{
