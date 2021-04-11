@@ -10,6 +10,8 @@ import Signup from '../pages/Signup';
 import Signout from '../pages/Signout';
 import Customers from '../pages/Customers';
 import Products from '../pages/Products';
+import ProductDetail from '../pages/ProductDetail';
+import NotFound from '../pages/NotFound';
 import ProtectedRoute from './ProtectedRoute';
 import Profile from '../pages/Profile';
 
@@ -22,7 +24,9 @@ const Routes = () => (
       <ProtectedRoute exact path='/' component={Home} />
       <ProtectedRoute exact path='/customers' component={Customers}/>
       <ProtectedRoute exact path='/products' component={Products}/>
+      <ProtectedRoute exact path='/products/:id' component={ProductDetail}/>
       <ProtectedRoute exact path='/profile' component={Profile}/>
+      <Route component={NotFound}/>
     </Switch>
   </Router>
 );
