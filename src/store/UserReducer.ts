@@ -23,9 +23,22 @@ export const initialUserState: UserState = {
   token: '',
 };
 
+export const confirmCodeAction = (): UserAction => ({
+  type: 'CONFIRM_CODE',
+  data: {
+    ...initialUserState,
+    emailVerified: true,
+  },
+});
+
 const userReducer = (state: UserState, action: UserAction): UserState => {
   console.log('user reducer ->', action);
   switch (action.type) {
+    case 'CONFIRM_CODE':
+      return {
+        ...state,
+        emailVerified: true,
+      };
     case 'SIGNIN':
       localStorage.storeUser(action.data);
       return {

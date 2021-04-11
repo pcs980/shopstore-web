@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import NavigationBar from '../components/NavigationBar';
-import * as localStorage from '../utils/localStorage';
+import { AppContext } from '../store/AppContext';
+import ConfirmCodeForm from '../components/ConfirmCodeForm';
 
 const Home: React.FC = () => {
-  const user = localStorage.getUser();
-  console.log({user});
+  const { user } = useContext(AppContext);
 
   return (
     <div style={{ height: 5000}}>
       <NavigationBar />
-      Home
+      {
+
+      }
+      {
+        !user.emailVerified && (
+          <ConfirmCodeForm />
+        )
+      }
     </div>
   );
 }

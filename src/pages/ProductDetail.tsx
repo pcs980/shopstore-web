@@ -140,6 +140,9 @@ const ProductDetail: React.FC = () => {
                 required
                 type='number'
                 value={price}
+                min={0.00}
+                max={999999999.99}
+                step={0.01}
                 isInvalid={priceError !== ''}
                 onChange={({ target }) => setPrice(target.value)}
               />

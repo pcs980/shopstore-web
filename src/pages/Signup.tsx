@@ -103,6 +103,7 @@ const Signup: React.FC = () => {
               <Form.Control
                 value={name}
                 maxLength={100}
+                isInvalid={nameError !== ''}
                 onChange={({ target }) => setName(target.value)}
               />
               <Form.Text style={{ color: 'red' }}>{nameError}</Form.Text>
@@ -113,6 +114,7 @@ const Signup: React.FC = () => {
                 type='email'
                 value={email}
                 maxLength={100}
+                isInvalid={emailError !== ''}
                 onChange={({ target }) => setEmail(target.value)}
               />
               <Form.Text style={{ color: 'red' }}>{emailError}</Form.Text>
@@ -122,6 +124,7 @@ const Signup: React.FC = () => {
               <Form.Control
                 value={password}
                 maxLength={20}
+                isInvalid={passwordError !== ''}
                 onChange={({ target }) => setPassword(target.value)}
                 type='password'
               />
@@ -132,6 +135,7 @@ const Signup: React.FC = () => {
               <Form.Control
                 value={confirmPassword}
                 maxLength={20}
+                isInvalid={confirmPasswordError !== ''}
                 onChange={({ target }) => setConfirmPassword(target.value)}
                 type='password'
               />
