@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
+import CustomAlert from '../components/CustomAlert';
 import NavigationBar from '../components/NavigationBar';
-import { create } from '../services/products';
+import { create, update } from '../services/products';
 import { AppContext } from '../store/AppContext';
-import { addProductAction } from '../store/ProductReducer';
+import { addProductAction, updateProductAction } from '../store/ProductReducer';
 import * as styles from '../styles';
 
 const ProductDetail: React.FC = () => {
@@ -14,7 +15,6 @@ const ProductDetail: React.FC = () => {
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState('');
   const [description, setDescription] = useState('');
-  const [code, setCode] = useState('');
   const [price, setPrice] = useState('');
   const [priceError, setPriceError] = useState('');
   const [active, setActive] = useState(false);
@@ -54,7 +54,6 @@ const ProductDetail: React.FC = () => {
     if (selectedProduct.length > 0) {
       setName(selectedProduct[0].name);
       setDescription(selectedProduct[0].description);
-      setCode(selectedProduct[0].code);
       setPrice(String(selectedProduct[0].price));
       setActive(selectedProduct[0].active);
     }
@@ -62,31 +61,56 @@ const ProductDetail: React.FC = () => {
 
   useEffect(() => {
     if (submitting) {
-      create({
-        name,
-        description,
-        code,
-        price,
-        active,
-      })
-        .then((response) => {
-          setSubmitting(false);
-          if (response.error) {
-            setError(response.error);
-          } else if (response.name) {
-            dispatchProduct(addProductAction(response));
-            history.goBack();
-          } else {
-            setError(`Oops... couldn't get server answer`);
-          }
-        });
+      if (isNew) {
+        create({
+          name,
+          description,
+          price,
+          active,
+        })
+          .then((response) => {
+            setSubmitting(false);
+            if (response.error) {
+              setError(response.error);
+            } else if (response.name) {
+              dispatchProduct(addProductAction(response));
+              history.goBack();
+            } else {
+              setError(`Oops... couldn't get server answer`);
+            }
+          });
+      } else {
+        update({
+          id,
+          name,
+          description,
+          price,
+          active,
+        })
+          .then((response) => {
+            setSubmitting(false);
+            if (response.error) {
+              setError(response.error);
+            } else if (response.name) {
+              dispatchProduct(updateProductAction(response));
+              history.goBack();
+            } else {
+              setError(`Oops... couldn't get server answer`);
+            }
+          });
+      }
     }
-  }, [submitting, name, description, code, price, active, history]);
+  }, [submitting, isNew, id, name, description, price, active, dispatchProduct, history]);
 
   return (
     <div>
       <NavigationBar />
       <div style={styles.centeredPainel}>
+        {
+          error && (
+            <CustomAlert type='danger' message={error} onClose={() => setError('')} />
+          )
+        }
         <div style={{ ...styles.bordered, ...styles.largePadded }}>
           <h3>{isNew ? 'New Product' : 'Edit product'}</h3>
           <Form noValidate onSubmit={submit} id='product_form'>
@@ -96,6 +120,7 @@ const ProductDetail: React.FC = () => {
                 required
                 value={name}
                 maxLength={50}
+                isInvalid={nameError !== ''}
                 onChange={({ target }) => setName(target.value)}
               />
               <Form.Text style={{ color: 'red' }}>{nameError}</Form.Text>
@@ -110,19 +135,12 @@ const ProductDetail: React.FC = () => {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label>Code</Form.Label>
-              <Form.Control
-                value={code}
-                maxLength={20}
-                onChange={({ target }) => setCode(target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
               <Form.Label>Price</Form.Label>
               <Form.Control
                 required
                 type='number'
                 value={price}
+                isInvalid={priceError !== ''}
                 onChange={({ target }) => setPrice(target.value)}
               />
               <Form.Text style={{ color: 'red' }}>{priceError}</Form.Text>
@@ -135,24 +153,15 @@ const ProductDetail: React.FC = () => {
                 checked={active}
                 onChange={({ target }) => setActive(target.checked)}
               />
+              <Form.Text muted>Keep this disabled to make the product inactive and prevent it being listed by customers.</Form.Text>
             </Form.Group>
             <div style={{ ...styles.centered }}>
               <Button type='submit' disabled={submitting}>
                 {submitting ? 'Please wait...' : ' Save '}
               </Button>
-              {
-                !isNew && (
-                  <Button
-                    variant='danger'
-                    style={{marginLeft: 10}}
-                    onClick={() => history.goBack()}
-                  >
-                    Remove
-                  </Button>
-                )
-              }
               <Button
                 variant='light'
+                disabled={submitting}
                 style={{marginLeft: 10}}
                 onClick={() => history.goBack()}
               >

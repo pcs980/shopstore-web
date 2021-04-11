@@ -10,7 +10,7 @@ export const centered: CSSProperties = {
 export const centeredPainel: CSSProperties = {
   verticalAlign: 'middle',
   width: '400px',
-  margin: '80px auto',
+  margin: '60px auto',
 };
 
 export const marginPainel: CSSProperties = {

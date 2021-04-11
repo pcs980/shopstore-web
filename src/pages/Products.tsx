@@ -17,6 +17,11 @@ const ProductsHome: React.FC = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    console.log('sorting');
+    product.products.sort((a, b) => b.name.localeCompare(a.name))
+  }, [sortBy, product]);
+
+  useEffect(() => {
     if (fetching) {
       get()
         .then((response) => {
@@ -28,7 +33,7 @@ const ProductsHome: React.FC = () => {
           }
         });
     }
-  }, [fetching]);
+  }, [fetching, dispatchProduct]);
 
   const refreshProducts = () => {
     setFetching(true);
@@ -107,7 +112,6 @@ const ProductsHome: React.FC = () => {
                 <tr>
                   <th>Name</th>
                   <th>Description</th>
-                  <th>Code</th>
                   <th style={{textAlign: 'center'}}>Price</th>
                   <th style={{textAlign: 'center'}}>Active?</th>
                   <th></th>
@@ -122,9 +126,6 @@ const ProductsHome: React.FC = () => {
                       </td>
                       <td style={{width: '25%'}}>
                         {truncateLongText(p.description || '')}
-                      </td>
-                      <td>
-                        {p.code}
                       </td>
                       <td style={{textAlign: 'center'}}>
                         {decimalNumber(p.price || 0)}

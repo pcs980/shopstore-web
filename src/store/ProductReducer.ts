@@ -2,7 +2,6 @@ export interface Product {
   id: number;
   name: string;
   description: string;
-  code: string;
   price: number;
   active: boolean;
   published_at?: Date;
@@ -24,7 +23,6 @@ export const initialProductState: ProductState = {
     id: 0,
     name: '',
     description: '',
-    code: '',
     price: 0,
     active: false,
   },
@@ -33,6 +31,14 @@ export const initialProductState: ProductState = {
 
 export const addProductAction = (product: Product): ProductAction => ({
   type: 'ADD_PRODUCT',
+  data: {
+    ...initialProductState,
+    product,
+  },
+});
+
+export const updateProductAction = (product: Product): ProductAction => ({
+  type: 'UPDATE_PRODUCT',
   data: {
     ...initialProductState,
     product,
@@ -66,6 +72,12 @@ const productReducer = (state: ProductState, action: ProductAction): ProductStat
     case 'UPDATE_PRODUCT':
       return {
         ...state,
+        products: state.products.map((p) => {
+          if (p.id === action.data.product.id) {
+            return action.data.product;
+          }
+          return p;
+        })
       };
     default:
       return state;
