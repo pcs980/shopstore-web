@@ -38,14 +38,14 @@ const NavigationBar: React.FC = () => {
       <Navbar.Brand href='/'>SHOPSTORE</Navbar.Brand>
       <Navbar.Toggle aria-controls='responsive-navbar-nav' />
       <Navbar.Collapse id='responsive-navbar-nav'>
-        {
-          user.emailVerified && (
+        {/* {
+          user.emailVerified && ( */}
             <Nav>
               <NavigationLink to='/customers' label='Customers' />
               <NavigationLink to='/products' label='Products' />
             </Nav>
-          )
-        }
+          {/* )
+        } */}
       </Navbar.Collapse>
       <Nav className='justify-content-end'>
         <NavigationLink to='/signout' label='Sign out' />

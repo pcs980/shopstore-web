@@ -9,7 +9,7 @@ import { AppContext } from '../store/AppContext';
 import * as styles from '../styles';
 
 const Signin: React.FC = () => {
-  const { setUser } = useContext(AppContext);
+  const { dispatchUser } = useContext(AppContext);
   const history = useHistory();
 
   const [email, setEmail] = useState('');
@@ -50,7 +50,7 @@ const Signin: React.FC = () => {
         .then((response) => {
           setSubmitting(false);
           if (response.token) {
-            setUser({
+            dispatchUser({
               type: 'SIGNIN',
               data: {
                 authenticated: true,
@@ -70,7 +70,7 @@ const Signin: React.FC = () => {
           }
         });
     }
-  }, [submitting, email, password, history, setUser]);
+  }, [submitting, email, password, history, dispatchUser]);
 
   return (
     <div style={{ ...styles.centeredPainel }}>

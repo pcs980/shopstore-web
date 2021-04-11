@@ -9,7 +9,7 @@ import * as styles from '../styles';
 import CustomAlert from '../components/CustomAlert';
 
 const Signup: React.FC = () => {
-  const { setUser } = useContext(AppContext);
+  const { dispatchUser } = useContext(AppContext);
   const history = useHistory();
 
   const [name, setName] = useState('');
@@ -66,7 +66,7 @@ const Signup: React.FC = () => {
         .then((response) => {
           setSubmitting(false);
           if (response.token) {
-            setUser({
+            dispatchUser({
               type: 'SIGNIN',
               data: {
                 id: response.id,
@@ -85,7 +85,7 @@ const Signup: React.FC = () => {
           }
         });
     }
-  }, [submitting, name, email, password, history, setUser]);
+  }, [submitting, name, email, password, history, dispatchUser]);
 
   return (
     <div style={{ display: 'flex' }}>

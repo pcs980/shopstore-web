@@ -1,23 +1,31 @@
 import { createContext, Dispatch, useReducer } from 'react';
+import productReducer, { initialProductState, ProductAction, ProductState } from './ProductReducer';
 import UserReducer, { initialUserState, UserAction, UserState } from './UserReducer';
 
 interface AppState {
   user: UserState;
-  setUser: Dispatch<UserAction>;
+  dispatchUser: Dispatch<UserAction>;
+  product: ProductState;
+  dispatchProduct: Dispatch<ProductAction>;
 }
 
 export const AppContext = createContext<AppState>({
   user: initialUserState,
-  setUser: () => {}
+  dispatchUser: () => {},
+  product: initialProductState,
+  dispatchProduct: () => {},
 });
 
 const AppProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useReducer(UserReducer, initialUserState);
+  const [user, dispatchUser] = useReducer(UserReducer, initialUserState);
+  const [product, dispatchProduct] = useReducer(productReducer, initialProductState);
 
   return (
     <AppContext.Provider value={{
       user,
-      setUser,
+      dispatchUser,
+      product,
+      dispatchProduct,
     }}>
       { children }
     </AppContext.Provider>
