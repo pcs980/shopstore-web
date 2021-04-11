@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Col, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import CustomAlert from '../components/CustomAlert';
 
@@ -81,7 +81,7 @@ const Signin: React.FC = () => {
       }
       <div style={{ ...styles.bordered, ...styles.largePadded }}>
         <h1 style={{marginBottom: '40px'}}>Sign in</h1>
-        <Form noValidate onSubmit={submit}>
+        <Form noValidate onSubmit={submit} id='signin_form'>
           <Form.Group controlId='email'>
             <Form.Label>E-mail</Form.Label>
             <Form.Control
@@ -89,7 +89,6 @@ const Signin: React.FC = () => {
               value={email}
               maxLength={100}
               onChange={({ target }) => {
-                console.log(target.value.trim() === '');
                 setEmail(target.value)
               }}
               type='email'

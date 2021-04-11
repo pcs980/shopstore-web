@@ -13,16 +13,51 @@ const Signup: React.FC = () => {
   const history = useHistory();
 
   const [name, setName] = useState('');
+  const [nameError, setNameError] = useState('');
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   const submit = (event: React.MouseEvent<HTMLFormElement>): void => {
     event.preventDefault();
     setError('');
-    setSubmitting(true);
+    if (validateForm()) {
+      setSubmitting(true);
+    }
+  }
+
+  const validateForm = (): boolean => {
+    let errors = 0;
+    if (name.trim() === '') {
+      setNameError('Type your name');
+      errors =+ 1;
+    } else {
+      setNameError('');
+    }
+    if (email.trim() === '') {
+      setEmailError('Type your e-mail address');
+      errors =+ 1;
+    } else {
+      setEmailError('');
+    }
+    if (password.trim() === '') {
+      setPasswordError('Type your password');
+      errors =+ 1;
+    } else {
+      setPasswordError('');
+    }
+    if (confirmPassword !== password) {
+      setConfirmPasswordError('Repeat your password');
+      errors =+ 1;
+    } else {
+      setConfirmPasswordError('');
+    }
+    return errors === 0;
   }
 
   useEffect(() => {
@@ -70,6 +105,7 @@ const Signup: React.FC = () => {
                 maxLength={100}
                 onChange={({ target }) => setName(target.value)}
               />
+              <Form.Text style={{ color: 'red' }}>{nameError}</Form.Text>
             </Form.Group>
             <Form.Group controlId='email'>
               <Form.Label>E-mail</Form.Label>
@@ -79,22 +115,27 @@ const Signup: React.FC = () => {
                 maxLength={100}
                 onChange={({ target }) => setEmail(target.value)}
               />
+              <Form.Text style={{ color: 'red' }}>{emailError}</Form.Text>
             </Form.Group>
             <Form.Group>
               <Form.Label>Password</Form.Label>
               <Form.Control
                 value={password}
+                maxLength={20}
                 onChange={({ target }) => setPassword(target.value)}
                 type='password'
               />
+              <Form.Text style={{ color: 'red' }}>{passwordError}</Form.Text>
             </Form.Group>
             <Form.Group>
               <Form.Label>Confirme password</Form.Label>
               <Form.Control
                 value={confirmPassword}
+                maxLength={20}
                 onChange={({ target }) => setConfirmPassword(target.value)}
                 type='password'
               />
+              <Form.Text style={{ color: 'red' }}>{confirmPasswordError}</Form.Text>
             </Form.Group>
             <div style={{ ...styles.centered }}>
               <Button type='submit' disabled={submitting}>
