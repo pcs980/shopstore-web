@@ -19,8 +19,8 @@ const getUser = () => {
   const user = JSON.parse(bytes.toString(crypto.enc.Utf8));
   return user;
 };
+
 const storeUser = (user: any) => {
-  console.log('store user', user);
   const crypted = crypto.AES.encrypt(JSON.stringify(user), k.B64_SECRET);
   localStorage.setItem(k.USER_LOCAL_STORAGE, crypted.toString());
 };

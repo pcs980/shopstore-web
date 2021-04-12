@@ -7,6 +7,8 @@ const colors = {
   secondaryLight: '#d5fadc',
   text: '#303030',
   gray: '#dfe0df',
+  red: '#990000',
+  lightRed: '#ffe6d9'
 };
 
 export default colors;
