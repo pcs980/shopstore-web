@@ -35,10 +35,12 @@ const userReducer = (state: UserState, action: UserAction): UserState => {
   console.log('user reducer ->', action);
   switch (action.type) {
     case 'CONFIRM_CODE':
-      return {
+      const user: UserState = {
         ...state,
         emailVerified: true,
       };
+      localStorage.storeUser(user);
+      return user;
     case 'SIGNIN':
       localStorage.storeUser(action.data);
       return {

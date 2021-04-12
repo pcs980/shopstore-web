@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import CustomAlert from '../components/CustomAlert';
 import NavigationBar from '../components/NavigationBar';
+import ImageUpload from '../components/ImageUpload';
 import { create, update } from '../services/products';
 import { AppContext } from '../store/AppContext';
 import { addProductAction, updateProductAction } from '../store/ProductReducer';
 import * as styles from '../styles';
+import WaitButton from '../components/WaitButton';
 
 const ProductDetail: React.FC = () => {
   const { product, dispatchProduct } = useContext(AppContext);
@@ -23,6 +25,10 @@ const ProductDetail: React.FC = () => {
 
   const {id} = useParams<any>();
   const isNew = id === 'new';
+
+  const onChangeFiles = (files: any) => {
+    console.log('on change files');
+  };
 
   const submit = (event: React.MouseEvent<HTMLFormElement>): void => {
     event.preventDefault();
@@ -115,6 +121,10 @@ const ProductDetail: React.FC = () => {
           <h3>{isNew ? 'New Product' : 'Edit product'}</h3>
           <Form noValidate onSubmit={submit} id='product_form'>
             <Form.Group controlId='name'>
+              <Form.Label>Images</Form.Label>
+              <ImageUpload onUploadFiles={onChangeFiles} />
+            </Form.Group>
+            <Form.Group controlId='name'>
               <Form.Label>Name</Form.Label>
               <Form.Control
                 required
@@ -159,17 +169,19 @@ const ProductDetail: React.FC = () => {
               <Form.Text muted>Keep this disabled to make the product inactive and prevent it being listed by customers.</Form.Text>
             </Form.Group>
             <div style={{ ...styles.centered }}>
-              <Button type='submit' disabled={submitting}>
-                {submitting ? 'Please wait...' : ' Save '}
-              </Button>
-              <Button
-                variant='light'
+              <WaitButton
+                type='submit'
                 disabled={submitting}
-                style={{marginLeft: 10}}
-                onClick={() => history.goBack()}
-              >
-                Voltar
-              </Button>
+                text='Save'
+              />
+              <div style={{marginLeft: 10}}>
+                <WaitButton
+                  variant='light'
+                  disabled={submitting}
+                  onClick={() => history.goBack()}
+                  text='Voltar'
+                />
+              </div>
             </div>
           </Form>
         </div>

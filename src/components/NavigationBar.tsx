@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Image, Nav, Navbar } from 'react-bootstrap';
-import { AppContext } from '../store/AppContext';
+import * as localStorage from '../utils/localStorage';
 
 interface NavigationLinkProps {
   to: string;
@@ -27,9 +27,9 @@ const NavigationLink: React.FC<NavigationLinkProps> = ({ to, label, children }) 
 };
 
 const NavigationBar: React.FC = () => {
-  const { user } = useContext(AppContext);
+  const user = localStorage.getUser();
 
-  if (!user?.authenticated) {
+  if (!user?.token) {
     return (<></>);
   }
 

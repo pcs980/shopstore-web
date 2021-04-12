@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Badge, Button, Dropdown, DropdownButton, Spinner, Table } from 'react-bootstrap';
+import { Badge, Dropdown, DropdownButton, Spinner, Table } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import CustomAlert from '../components/CustomAlert';
 import NavigationBar from '../components/NavigationBar';
+import WaitButton from '../components/WaitButton';
 import { get } from '../services/products';
 import { AppContext } from '../store/AppContext';
 import { getProductAction } from '../store/ProductReducer';
@@ -86,16 +87,15 @@ const ProductsHome: React.FC = () => {
             </DropdownButton>
           </div>
           <div>
-            <Button size='sm' variant='light' onClick={refreshProducts}>
-              Refresh
-            </Button>
-            <Button
-              size='sm'
-              style={{marginLeft: 10}}
+            <WaitButton
+              variant='light'
+              onClick={refreshProducts}
+              text='Refresh'
+            />
+            <WaitButton
               onClick={() => openProduct('new')}
-            >
-              New product
-            </Button>
+              text='New product'
+            />
           </div>
         </div>
         {
@@ -136,14 +136,11 @@ const ProductsHome: React.FC = () => {
                         </Badge>
                       </td>
                       <td style={{textAlign: 'center'}}>
-                        <Button
+                        <WaitButton
                           variant='light'
-                          size='sm'
-                          style={{marginLeft: 10}}
                           onClick={() => openProduct(p.id)}
-                        >
-                          Edit
-                        </Button>
+                          text='Edit'
+                        />
                       </td>
                     </tr>
                   ))

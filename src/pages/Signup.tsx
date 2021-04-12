@@ -7,6 +7,7 @@ import { AppContext } from '../store/AppContext';
 import { signup } from '../services/user';
 import * as styles from '../styles';
 import CustomAlert from '../components/CustomAlert';
+import WaitButton from '../components/WaitButton';
 
 const Signup: React.FC = () => {
   const { dispatchUser } = useContext(AppContext);
@@ -142,9 +143,11 @@ const Signup: React.FC = () => {
               <Form.Text style={{ color: 'red' }}>{confirmPasswordError}</Form.Text>
             </Form.Group>
             <div style={{ ...styles.centered }}>
-              <Button type='submit' disabled={submitting}>
-                {submitting ? 'Please wait...' : 'Sign up'}
-              </Button>
+              <WaitButton
+                type='submit'
+                disabled={submitting}
+                text='Sign up'
+              />
             </div>
             <Divider />
             <p>

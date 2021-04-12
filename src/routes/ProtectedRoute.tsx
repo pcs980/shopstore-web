@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { AppContext } from '../store/AppContext';
+import * as localStorage from '../utils/localStorage';
 
 interface ProtectedRouteProps {
   exact: boolean;
@@ -9,7 +9,7 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
-  const { user } = useContext(AppContext);
+  const user = localStorage.getUser();
 
   if (!user.token) {
     return (

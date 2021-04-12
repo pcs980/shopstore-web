@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import CustomAlert from '../components/CustomAlert';
 
 import Divider from '../components/Divider';
+import WaitButton from '../components/WaitButton';
 import { signin } from '../services/user';
 import { AppContext } from '../store/AppContext';
 import * as styles from '../styles';
@@ -107,9 +108,11 @@ const Signin: React.FC = () => {
             <Form.Text style={{ color: 'red' }}>{passwordError}</Form.Text>
           </Form.Group>
           <div style={{ ...styles.centered }}>
-            <Button type='submit' disabled={submitting}>
-              {submitting ? 'Please wait...' : 'Sign in'}
-            </Button>
+            <WaitButton
+              type='submit'
+              disabled={submitting}
+              text='Sign in'
+            />
           </div>
           <Divider />
           <p>

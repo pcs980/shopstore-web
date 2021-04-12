@@ -1,25 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Form } from 'react-bootstrap';
 import { confirmCode } from '../services/user';
-import { AppContext } from '../store/AppContext';
-import { confirmCodeAction, UserState } from '../store/UserReducer';
+import { confirmCodeAction } from '../store/UserReducer';
 import * as styles from '../styles';
 import CustomAlert from './CustomAlert';
+import WaitButton from './WaitButton';
 
 interface ConfirmCodeFormProps {
+  user: any,
+  dispatchUser: any,
 }
 
-const ConfirmCodeForm: React.FC<ConfirmCodeFormProps> = () => {
-  const { user, dispatchUser } = useContext(AppContext);
+const ConfirmCodeForm: React.FC<ConfirmCodeFormProps> = ({ user, dispatchUser }) => {
   const [code, setCode] = useState('');
   const [codeError, setCodeError] = useState('');
   const [submittingCode, setSubmittingCode] = useState(false);
-  const [requestEmail, setRequestEmail] = useState(false);
   const [error, setError] = useState('');
-
-  const requestNewEmail = () => {
-    setRequestEmail(true);
-  };
 
   const submit = (event: React.MouseEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -61,13 +57,6 @@ const ConfirmCodeForm: React.FC<ConfirmCodeFormProps> = () => {
     }
   }, [submittingCode, user, code, dispatchUser]);
 
-  useEffect(() => {
-    if (requestEmail) {
-      console.log('requesting new e-mail');
-      setRequestEmail(false);
-    }
-  }, [requestEmail]);
-
   return (
     <div style={styles.centeredPainel}>
       {
@@ -99,27 +88,13 @@ const ConfirmCodeForm: React.FC<ConfirmCodeFormProps> = () => {
             <Form.Text style={{ color: 'red' }}>{codeError}</Form.Text>
           </Form.Group>
           <div style={{ ...styles.centered }}>
-            <Button type='submit' disabled={submittingCode}>
-              Verify
-            </Button>
+            <WaitButton
+              type='submit'
+              disabled={submittingCode}
+              text='Verify'
+            />
           </div>
         </Form>
-
-        <div style={{ marginTop: 30}}>
-          <p>
-            You can request a e-mail by clicking on 'Send again' button
-            if the e-mail was not found.
-          </p>
-          <div style={{ ...styles.centered }}>
-            <Button
-              onClick={requestNewEmail}
-              variant='light'
-              disabled={submittingCode}
-            >
-              Send again
-            </Button>
-          </div>
-        </div>
       </div>
     </div>
   );

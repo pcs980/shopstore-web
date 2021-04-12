@@ -1,8 +1,13 @@
 import request from '../utils/request';
+import * as localStorage from '../utils/localStorage';
 
 const create = async (body: any): Promise<any> => {
   try {
-    const response = await request.post('/products', body);
+    const response = await request.post('/products', body, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getUser().token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (error.response?.data?.error) {
@@ -16,7 +21,11 @@ const create = async (body: any): Promise<any> => {
 
 const update = async (body: any): Promise<any> => {
   try {
-    const response = await request.put(`/products/${body.id}`, body);
+    const response = await request.put(`/products/${body.id}`, body, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getUser().token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (error.response?.data?.error) {
@@ -30,7 +39,11 @@ const update = async (body: any): Promise<any> => {
 
 const get = async (): Promise<any> => {
   try {
-    const response = await request.get('/products');
+    const response = await request.get('/products', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getUser().token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (error.response?.data?.error) {
