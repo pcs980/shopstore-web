@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Badge, Dropdown, DropdownButton, Spinner, Table } from 'react-bootstrap';
 import { useHistory } from 'react-router';
+import Lottie from 'lottie-react';
 import CustomAlert from '../components/CustomAlert';
 import NavigationBar from '../components/NavigationBar';
 import WaitButton from '../components/WaitButton';
 import { get } from '../services/products';
 import { AppContext } from '../store/AppContext';
-import { getProductAction } from '../store/ProductReducer';
-import * as styles from '../styles';
+import { getProductAction, Product } from '../store/ProductReducer';
 import { decimalNumber, truncateLongText } from '../utils/parsers';
+import * as styles from '../styles';
+import noProducts from '../assets/animations/noProducts.json';
 
 const ProductsHome: React.FC = () => {
   const history = useHistory();
@@ -34,9 +36,10 @@ const ProductsHome: React.FC = () => {
           }
         });
     }
-  }, [fetching, dispatchProduct]);
+  }, [fetching, product, dispatchProduct]);
 
   const refreshProducts = () => {
+    setError('');
     setFetching(true);
   };
 
@@ -44,8 +47,13 @@ const ProductsHome: React.FC = () => {
     history.push(`/products/${id}`);
   };
 
-  const sortProducts = (e: string) => {
-    setSortBy(e);
+  const sortProducts = (a: Product, b: Product): number => {
+    if (sortBy === 'active') {
+      return a.active < b.active ? 1 : -1;
+    } else if (sortBy === 'price') {
+      return a.price > b.price ? 1 : -1;
+    }
+    return a.name.localeCompare(b.name);
   };
 
   return (
@@ -68,19 +76,19 @@ const ProductsHome: React.FC = () => {
             >
               <Dropdown.Item
                 active={sortBy === 'name'}
-                onSelect={() => sortProducts('name')}
+                onSelect={() => setSortBy('name')}
               >
                 <span style={{fontSize: 12}}>Name</span>
               </Dropdown.Item>
               <Dropdown.Item
-                active={sortBy === 'newest'}
-                onSelect={() => sortProducts('newest')}
+                active={sortBy === 'price'}
+                onSelect={() => setSortBy('price')}
               >
-                <span style={{fontSize: 12}}>Newest</span>
+                <span style={{fontSize: 12}}>Cheapest</span>
               </Dropdown.Item>
               <Dropdown.Item
                 active={sortBy === 'active'}
-                onSelect={() => sortProducts('active')}
+                onSelect={() => setSortBy('active')}
               >
                 <span style={{fontSize: 12}}>Active</span>
               </Dropdown.Item>
@@ -106,6 +114,14 @@ const ProductsHome: React.FC = () => {
           )
         }
         {
+          !fetching && product.products.length === 0 && (
+            <div style={styles.centeredPainel}>
+              <Lottie animationData={noProducts} autoplay style={{ width: '40%', height: '40%'}} />
+              No products
+            </div>
+          )
+        }
+        {
           product.products.length > 0 && (
             <Table responsive bordered>
               <thead>
@@ -119,7 +135,7 @@ const ProductsHome: React.FC = () => {
               </thead>
               <tbody>
                 {
-                  product.products.map((p) => (
+                  product.products.sort(sortProducts).map((p) => (
                     <tr key={p.id}>
                       <td style={{width: '30%'}}>
                         {p.name}
