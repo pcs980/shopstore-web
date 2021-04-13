@@ -1,46 +1,67 @@
-# Getting Started with Create React App
+# Shopstore Web App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Before run
 
-## Available Scripts
+Start [Shopstore Server App](https://github.com/pcs980/shopstore-api).
 
-In the project directory, you can run:
+```sh
+info: Start consuming queues from localhost:6379
+info: Service ready and listening to port 3030
+```
 
-### `yarn start`
+And make sure constant `SERVER_BASE_URL` is setted to service host and port.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Run
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Execute the commands below in inside the project's folder:
 
-### `yarn test`
+```
+yarn install
+yarn start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## User stories
 
-### `yarn build`
+### *As a guest, I want to sign up and sign in to the application*
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+OK.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### *As a user, I want to confirm my email to start using the application*
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+OK.
 
-### `yarn eject`
+### *As a new user, I need to confirm my email address to start using the application*
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+OK.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The first screen for new users is the e-mail verification code and the products menu is not shown.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+![Verification code](assets/email-verification-code.png)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### *As a user, I want to create a product with at least these fields: name, description, price and published_at*
 
-## Learn More
+OK.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The published at field automatically filled on saving.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+![New product](assets/new-product.png)
+
+### *As a user, I want to upload one or more images to the product*
+
+The default limit is 3 images, but you can define a different limit by setting `MAX_PRODUCT_IMAGES` in [constants file](src/utils/constants.ts).
+
+![Image limit](assets/product-image-limit.png)
+
+### *As a user, I want to list all the products I've created*
+
+OK.
+
+![List products](assets/list-products.png)
+
+### *As a user, I want to update and soft deletes a product*
+
+OK.
+
+I understood that **soft delete feature** can be achieved by setting the field **Active**, so the user can decide if the product should not be shown to customers, for example.
+
+![Edit products](assets/edit-product.png)

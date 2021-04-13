@@ -31,7 +31,6 @@ export const confirmCodeAction = (): UserAction => ({
 });
 
 const userReducer = (state: UserState, action: UserAction): UserState => {
-  console.log('user reducer ->', action);
   switch (action.type) {
     case 'CONFIRM_CODE':
       const user: UserState = {

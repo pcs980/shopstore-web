@@ -53,7 +53,6 @@ const ConfirmCodeForm: React.FC<ConfirmCodeFormProps> = ({ user, dispatchUser })
           }
 
         });
-      console.log('submitting code', code);
     }
   }, [submittingCode, user, code, dispatchUser]);
 

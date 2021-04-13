@@ -20,7 +20,6 @@ const ProductsHome: React.FC = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    console.log('sorting');
     product.products.sort((a, b) => b.name.localeCompare(a.name))
   }, [sortBy, product]);
 
@@ -137,10 +136,10 @@ const ProductsHome: React.FC = () => {
                 {
                   product.products.sort(sortProducts).map((p) => (
                     <tr key={p.id}>
-                      <td style={{width: '30%'}}>
+                      <td style={{width: '25%'}}>
                         {p.name}
                       </td>
-                      <td style={{width: '25%'}}>
+                      <td style={{width: '30%'}}>
                         {truncateLongText(p.description || '')}
                       </td>
                       <td style={{textAlign: 'center'}}>

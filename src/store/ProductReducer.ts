@@ -76,7 +76,6 @@ export const getProductImagesAction = (productId: number, images: ProductImage[]
 });
 
 const productReducer = (state: ProductState, action: ProductAction): ProductState => {
-  console.log('product reducer ->', action);
   switch (action.type) {
     case 'GET_PRODUCT':
       return {
