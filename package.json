@@ -1,7 +1,23 @@
 {
   "name": "shopstore-web",
   "version": "1.0.0",
+  "description": "Shopstore Web App",
   "private": true,
+  "author": {
+    "name": "Paulo César da Silva",
+    "email": "paulocsmg@gmail.com",
+    "url": "https://www.linkedin.com/in/pcs980"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/node-react-test/react/issues"
+  },
+  "homepage": "https://gitlab.com/node-react-test/react",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -22,12 +38,6 @@
     "react-scripts": "4.0.3",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

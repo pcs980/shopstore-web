@@ -27,7 +27,7 @@ const ProductDetail: React.FC = () => {
   const [active, setActive] = useState(true);
   const [fetchingImages, setFetchingImages] = useState(true);
   const [images, setImages] = useState<ProductImage[]>([]);
-  const [removedImageIds, setRemovedImageIds] = useState<number[]>([]);
+  const [removedImageIds, setRemovedImageIds] = useState<ProductImage[]>([]);
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -54,7 +54,7 @@ const ProductDetail: React.FC = () => {
 
   const onRemoveAnyImage = (removed: ProductImage | UploadedImage) => {
     if ('product_id' in removed) {
-      setRemovedImageIds((previous) => [...previous, removed.id]);
+      setRemovedImageIds((previous) => [...previous, ...images.filter((image) => image.id === removed.id)]);
       setImages(images.filter((image) => image.image_name !== removed.image_name));
     } else {
       setUploadedImages(uploadedImages.filter((image) => image.image_name !== removed.image_name));
