@@ -1,11 +1,11 @@
 import * as localStorage from "../utils/localStorage";
 
 export interface UserState {
-  authenticated?: boolean;
   id: number;
   name: string;
   email: string;
   emailVerified: boolean;
+  registeredAt?: Date;
   token: string;
 };
 
@@ -15,7 +15,6 @@ export interface UserAction {
 }
 
 export const initialUserState: UserState = {
-  authenticated: false,
   id: 0,
   name: '',
   email: '',
@@ -45,7 +44,6 @@ const userReducer = (state: UserState, action: UserAction): UserState => {
       localStorage.storeUser(action.data);
       return {
         ...state,
-        authenticated: true,
         id: action.data.id,
         name: action.data.name,
         email: action.data.email,
@@ -55,7 +53,6 @@ const userReducer = (state: UserState, action: UserAction): UserState => {
     case 'SIGNOUT':
       localStorage.storeUser(initialUserState);
       return {
-        ...state,
         ...initialUserState,
       };
     default:

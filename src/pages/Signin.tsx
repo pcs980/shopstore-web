@@ -54,11 +54,11 @@ const Signin: React.FC = () => {
             dispatchUser({
               type: 'SIGNIN',
               data: {
-                authenticated: true,
                 id: response.id,
                 name: response.name,
                 email: response.email,
                 emailVerified: response.email_verified,
+                registeredAt: response.registered_at,
                 token: response.token,
               }
             });

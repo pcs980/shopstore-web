@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 
 import Divider from '../components/Divider';
