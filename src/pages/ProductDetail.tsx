@@ -3,32 +3,63 @@ import { Form } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import CustomAlert from '../components/CustomAlert';
 import NavigationBar from '../components/NavigationBar';
-import ImageUpload from '../components/ImageUpload';
-import { create, update } from '../services/products';
+import { create, getImages, update } from '../services/products';
 import { AppContext } from '../store/AppContext';
-import { addProductAction, updateProductAction } from '../store/ProductReducer';
-import * as styles from '../styles';
+import { addProductAction, ProductImage, updateProductAction } from '../store/ProductReducer';
 import WaitButton from '../components/WaitButton';
+import ImageCard, { UploadedImage } from '../components/ImageCard';
+import k from '../utils/constants';
+import colors from '../styles/colors';
+import * as styles from '../styles';
+import { formatDate } from '../utils/dates';
 
 const ProductDetail: React.FC = () => {
   const { product, dispatchProduct } = useContext(AppContext);
   const history = useHistory();
+  const maxProductImages = k.MAX_PRODUCT_IMAGES;
 
+  const [publishedAt, setPublishedAt] = useState('');
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [priceError, setPriceError] = useState('');
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(true);
+  const [fetchingImages, setFetchingImages] = useState(true);
+  const [images, setImages] = useState<ProductImage[]>([]);
+  const [removedImageIds, setRemovedImageIds] = useState<number[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   const {id} = useParams<any>();
   const isNew = id === 'new';
 
-  const onChangeFiles = (files: any) => {
-    console.log('on change files');
+  if (!isNew && product.products.length === 0) {
+    history.push('/products');
+  }
+
+  const onChangeFiles = (event: any) => {
+    if (event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = () => setUploadedImages(
+        (previous) => [...previous, {
+          id: event.target.files[0].name,
+          image_name: String(reader.result),
+        }]
+      );
+    }
   };
+
+  const onRemoveAnyImage = (removed: ProductImage | UploadedImage) => {
+    if ('product_id' in removed) {
+      setRemovedImageIds((previous) => [...previous, removed.id]);
+      setImages(images.filter((image) => image.image_name !== removed.image_name));
+    } else {
+      setUploadedImages(uploadedImages.filter((image) => image.image_name !== removed.image_name));
+    }
+  }
 
   const submit = (event: React.MouseEvent<HTMLFormElement>): void => {
     event.preventDefault();
@@ -56,8 +87,26 @@ const ProductDetail: React.FC = () => {
   }
 
   useEffect(() => {
+    if (fetchingImages && !isNew) {
+      getImages(id)
+        .then((response) => {
+          setFetchingImages(false);
+          if (response.error) {
+            setError(response.error);
+          } else {
+            setImages(response.map((image: any) => ({
+              ...image,
+              image_name: `${k.SERVER_BASE_URL}/images/${image.image_name}`,
+            })));
+          }
+        });
+    }
+  }, [id, isNew, fetchingImages, setFetchingImages]);
+
+  useEffect(() => {
     const selectedProduct = product.products.filter((p) => p.id === id);
     if (selectedProduct.length > 0) {
+      setPublishedAt(formatDate(selectedProduct[0].published_at));
       setName(selectedProduct[0].name);
       setDescription(selectedProduct[0].description);
       setPrice(String(selectedProduct[0].price));
@@ -67,13 +116,15 @@ const ProductDetail: React.FC = () => {
 
   useEffect(() => {
     if (submitting) {
+      const product = {
+        name,
+        description,
+        price,
+        active,
+        base64images: uploadedImages.map((img) => img.image_name)
+      };
       if (isNew) {
-        create({
-          name,
-          description,
-          price,
-          active,
-        })
+        create(product)
           .then((response) => {
             setSubmitting(false);
             if (response.error) {
@@ -87,11 +138,9 @@ const ProductDetail: React.FC = () => {
           });
       } else {
         update({
+          ...product,
           id,
-          name,
-          description,
-          price,
-          active,
+          removedImageIds,
         })
           .then((response) => {
             setSubmitting(false);
@@ -106,7 +155,7 @@ const ProductDetail: React.FC = () => {
           });
       }
     }
-  }, [submitting, isNew, id, name, description, price, active, dispatchProduct, history]);
+  }, [submitting, isNew, id, name, description, price, images, uploadedImages, removedImageIds, active, dispatchProduct, history]);
 
   return (
     <div>
@@ -120,9 +169,34 @@ const ProductDetail: React.FC = () => {
         <div style={{ ...styles.bordered, ...styles.largePadded }}>
           <h3>{isNew ? 'New Product' : 'Edit product'}</h3>
           <Form noValidate onSubmit={submit} id='product_form'>
-            <Form.Group controlId='name'>
+            <Form.Group controlId='upload'>
               <Form.Label>Images</Form.Label>
-              <ImageUpload onUploadFiles={onChangeFiles} />
+              <ImageCard
+                fetching={fetchingImages && !isNew}
+                images={[...images, ...uploadedImages]}
+                onImageRemove={onRemoveAnyImage}
+              />
+              <Form.File
+                draggable
+                disabled={(uploadedImages.length + images.length >= maxProductImages)}
+                accept='image/*'
+                onChange={onChangeFiles}
+                style={{ padding: 10, marginBottom: 10, backgroundColor: colors.gray }}
+              />
+              <Form.Text muted>
+                {`The product can have up to ${maxProductImages} images. Selected ${uploadedImages.length + images.length} image(s).`}
+              </Form.Text>
+              <Form.Text muted>
+                Images marked with asterisk (*) aren't stored in server yet.
+              </Form.Text>
+            </Form.Group>
+            <Form.Group controlId='publishedAt'>
+              <Form.Label>Published At</Form.Label>
+              <Form.Control
+                disabled
+                value={publishedAt ? publishedAt : 'Automatically filled'}
+                isInvalid={nameError !== ''}
+              />
             </Form.Group>
             <Form.Group controlId='name'>
               <Form.Label>Name</Form.Label>

@@ -1,15 +1,26 @@
+export interface ProductImage {
+  id: number;
+  product_id: number;
+  image_name: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface Product {
   id: number;
   name: string;
   description: string;
   price: number;
+  images?: ProductImage[];
   active: boolean;
   published_at?: Date;
   updated_at?: Date;
 }
 
 export interface ProductState {
+  productId: number;
   product: Product,
+  images: ProductImage[],
   products: Product[],
 };
 
@@ -19,6 +30,7 @@ export interface ProductAction {
 }
 
 export const initialProductState: ProductState = {
+  productId: 0,
   product: {
     id: 0,
     name: '',
@@ -26,6 +38,7 @@ export const initialProductState: ProductState = {
     price: 0,
     active: false,
   },
+  images: [],
   products: [],
 };
 
@@ -53,6 +66,15 @@ export const getProductAction = (products: Product[]): ProductAction => ({
   },
 });
 
+export const getProductImagesAction = (productId: number, images: ProductImage[]): ProductAction => ({
+  type: 'GET_PRODUCT_IMAGE',
+  data: {
+    ...initialProductState,
+    productId,
+    images,
+  },
+});
+
 const productReducer = (state: ProductState, action: ProductAction): ProductState => {
   console.log('product reducer ->', action);
   switch (action.type) {
@@ -60,6 +82,17 @@ const productReducer = (state: ProductState, action: ProductAction): ProductStat
       return {
         ...state,
         products: [...action.data.products],
+      };
+    case 'GET_PRODUCT_IMAGE':
+      return {
+        ...state,
+        products: state.products.map((p) => {
+          if (p.id === action.data.productId) {
+            p.images = action.data.images;
+          }
+
+          return p;
+        }),
       };
     case 'ADD_PRODUCT':
       return {
@@ -77,7 +110,7 @@ const productReducer = (state: ProductState, action: ProductAction): ProductStat
             return action.data.product;
           }
           return p;
-        })
+        }).sort((a, b) => b.name.localeCompare(a.name))
       };
     default:
       return state;

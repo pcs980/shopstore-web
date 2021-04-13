@@ -1,23 +1,26 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import { ButtonVariant } from 'react-bootstrap/esm/types';
 
 interface WaitButtonProps {
+  small?: boolean;
   disabled?: boolean;
   text: string;
   type?: string;
-  variant?: string;
+  variant?: ButtonVariant;
   onClick?: any;
 }
 
-const WaitButton: React.FC<WaitButtonProps> = ({ disabled, text, type, variant, onClick }) => {
+const WaitButton: React.FC<WaitButtonProps> = ({ small, disabled, text, type, variant, onClick }) => {
   return (
     <Button
+      size={small ? 'sm' : undefined}
       disabled={disabled}
       type={type ? type : 'button'}
       variant={variant ? variant : 'primary'}
       onClick={onClick ? onClick : () => {}}
     >
-      {disabled ? 'Please wait...' : text}
+      <span style={{ fontSize: small ? 12 : 14 }}>{disabled ? 'Please wait...' : text}</span>
     </Button>
   );
 };

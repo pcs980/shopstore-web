@@ -55,8 +55,27 @@ const get = async (): Promise<any> => {
   }
 };
 
+const getImages = async (id: number): Promise<any> => {
+  try {
+    const response = await request.get(`/products/${id}/images`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getUser().token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response?.data?.error) {
+      return error.response.data;
+    }
+    return {
+      error: `${error.response.statusText} (${error.response.status})`,
+    }
+  }
+};
+
 export {
   create,
   get,
+  getImages,
   update,
 };

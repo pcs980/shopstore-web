@@ -3,6 +3,7 @@ const constants = {
   B64_SECRET: 'b@s36As3crEtkeY',
   USERS_API: process.env.USER_API || '/users',
   USER_LOCAL_STORAGE: 'webapp:user',
+  MAX_PRODUCT_IMAGES: 3,
 };
 
 export default constants;

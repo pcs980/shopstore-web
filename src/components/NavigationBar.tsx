@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Image, Nav, Navbar } from 'react-bootstrap';
 import * as localStorage from '../utils/localStorage';
+import colors from '../styles/colors';
 
 interface NavigationLinkProps {
   to: string;
@@ -37,22 +38,22 @@ const NavigationBar: React.FC = () => {
     <Navbar bg='light' expand='md'>
       <Navbar.Brand href='/'>SHOPSTORE</Navbar.Brand>
       <Navbar.Toggle aria-controls='responsive-navbar-nav' />
-      <Navbar.Collapse id='responsive-navbar-nav'>
+      <Navbar.Collapse id='responsive-navbar-nav' className='justify-content-end'>
         {
           user.emailVerified && (
-            <Nav>
+            <Nav className='mr-auto'>
               <NavigationLink to='/customers' label='Customers' />
               <NavigationLink to='/products' label='Products' />
             </Nav>
           )
         }
       </Navbar.Collapse>
-      <Nav className='justify-content-end'>
-        <NavigationLink to='/signout' label='Sign out' />
-        <NavigationLink to='/profile'>
-          <Image roundedCircle src='/assets/avatar-placeholder.jpg' style={{ width: 30, height: 30 }} />
-        </NavigationLink>
-      </Nav>
+      <NavigationLink to='/signout'>
+        <Navbar.Text style={{ color: colors.red }}>Sign out</Navbar.Text>
+      </NavigationLink>
+      <NavigationLink to='/profile'>
+        <Image roundedCircle src='/assets/avatar-placeholder.jpg' style={{ width: 30, height: 30 }} />
+      </NavigationLink>
     </Navbar>
   );
 }
