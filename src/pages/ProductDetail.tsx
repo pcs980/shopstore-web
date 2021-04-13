@@ -178,7 +178,7 @@ const ProductDetail: React.FC = () => {
               />
               <Form.File
                 draggable
-                disabled={(uploadedImages.length + images.length >= maxProductImages)}
+                disabled={(uploadedImages.length + images.length >= maxProductImages || fetchingImages)}
                 accept='image/*'
                 onChange={onChangeFiles}
                 style={{ padding: 10, marginBottom: 10, backgroundColor: colors.gray }}

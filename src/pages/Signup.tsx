@@ -74,6 +74,7 @@ const Signup: React.FC = () => {
                 name: response.name,
                 email: response.email,
                 emailVerified: response.email_verified,
+                registeredAt: response.registered_at,
                 token: response.token,
               },
             });
