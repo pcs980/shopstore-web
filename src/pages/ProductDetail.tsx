@@ -100,7 +100,10 @@ const ProductDetail: React.FC = () => {
             })));
           }
         });
+    } else if (isNew) {
+      setFetchingImages(false);
     }
+
   }, [id, isNew, fetchingImages, setFetchingImages]);
 
   useEffect(() => {

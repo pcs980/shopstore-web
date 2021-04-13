@@ -2,14 +2,14 @@
 
 ## Before run
 
-Start [Shopstore Server App](https://github.com/pcs980/shopstore-api).
+Start [Shopstore Server App](https://github.com/pcs980/shopstore-api). If everything works fine you will this output:
 
 ```sh
 info: Start consuming queues from localhost:6379
 info: Service ready and listening to port 3030
 ```
 
-And make sure constant `SERVER_BASE_URL` is setted to service host and port.
+And make sure [constant](src/utils/constants.ts) `SERVER_BASE_URL` is setted to service host and port.
 
 ## Run
 

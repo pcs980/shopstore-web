@@ -19,20 +19,21 @@ const WelcomeHome: React.FC<WelcomeHomeProps> = ({ user }) => {
 };
 
 const Home: React.FC = () => {
-  const { user, dispatchUser } = useContext(AppContext);
+  const { dispatchUser } = useContext(AppContext);
   const storedUser = localStorage.getUser();
+  console.log(storedUser);
 
   return (
     <div style={{ height: 5000}}>
       <NavigationBar />
       {
         !storedUser.emailVerified && (
-          <ConfirmCodeForm user={user} dispatchUser={dispatchUser} />
+          <ConfirmCodeForm user={storedUser} dispatchUser={dispatchUser} />
         )
       }
       {
         storedUser.emailVerified && (
-          <WelcomeHome user={user} />
+          <WelcomeHome user={storedUser} />
         )
       }
     </div>

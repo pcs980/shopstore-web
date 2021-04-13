@@ -10,10 +10,15 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
   const user = localStorage.getUser();
+  console.log(user);
 
   if (!user.token) {
     return (
       <Redirect to='/signin' />
+    )
+  } else if (!user.emailVerified) {
+    return (
+      <Redirect to='/' />
     )
   }
   return (
