@@ -256,7 +256,7 @@ const ProductDetail: React.FC = () => {
                   variant='light'
                   disabled={submitting}
                   onClick={() => history.goBack()}
-                  text='Voltar'
+                  text='Back'
                 />
               </div>
             </div>
